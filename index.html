@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Unlock My Heart</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+}
+.card {
+  max-width: 500px;
+  margin: 50px auto;
+  background: rgba(255,255,255,0.15);
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 1s ease forwards;
+}
+button {
+  padding: 10px 20px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #ff4d6d;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+button:hover { transform: scale(1.05); }
+.hidden { display: none; }
+.heart {
+  width: 50px; height: 50px;
+  background: #ff4d6d;
+  position: relative;
+  transform: rotate(-45deg);
+  margin: 20px auto;
+  animation: heartbeat 1.5s infinite;
+}
+.heart::before, .heart::after {
+  content: "";
+  width: 50px; height: 50px;
+  background: #ff4d6d;
+  border-radius: 50%;
+  position: absolute;
+}
+.heart::before { top: -25px; left: 0; }
+.heart::after { left: 25px; top: 0; }
+@keyframes heartbeat {
+  0%, 100% { transform: rotate(-45deg) scale(1); }
+  50% { transform: rotate(-45deg) scale(1.2); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 10px; height: 10px;
+  background-color: red;
+  animation: fall linear forwards;
+  z-index: 9999;
+}
+@keyframes fall {
+  to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="card" id="welcome">
+  <div class="heart"></div>
+  <h1>Unlock My Heart</h1>
+  <p>I made you a little adventure. Answer a few questions to reveal something special.</p>
+  <button onclick="startQuiz()">Start 💌</button>
+</div>
+
+<div class="card hidden" id="quiz">
+  <h2 id="question"></h2>
+  <input type="text" id="answer" placeholder="Type your answer..." />
+  <div id="feedback"></div>
+  <button onclick="checkAnswer()">Submit</button>
+</div>
+
+<div class="card hidden" id="final">
+  <div class="heart"></div>
+  <h2>For You❤️</h2>
+  <div id="videoContainer"></div>
+</div>
+
+<script>
+const QUESTIONS = [
+  { q: "What is my favourite colour", a: ["blue"] },
+  { q: "When is my birthday", a: ["21 september", "21st september"] },
+  { q: "What date did we start talking", a: ["9 august", "09 august"] },
+  { q: "What is the name of my smaller dog", a: ["sky"] },
+  { q: "What is the name of the car that i want and is it pretty", a: ["dodge hellcat and yes its pretty", "dodge hellcat yes its pretty"] }
+];
+
+const VIDEO_URL = "YOUR_VIDEO_LINK_HERE"; // Replace with your video link
+let current = 0;
+
+function startQuiz() {
+  document.getElementById("welcome").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  document.getElementById("question").textContent = QUESTIONS[current].q;
+  document.getElementById("answer").value = "";
+  document.getElementById("feedback").textContent = "";
+}
+
+function checkAnswer() {
+  const userAns = document.getElementById("answer").value.trim().toLowerCase();
+  if (QUESTIONS[current].a.includes(userAns)) {
+    current++;
+    if (current < QUESTIONS.length) {
+      showQuestion();
+    } else {
+      showFinal();
+    }
+  } else {
+    document.getElementById("feedback").textContent = "Not quite — try again!";
+  }
+}
+
+function showFinal() {
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("final").classList.remove("hidden");
+  launchConfetti();
+  let videoHTML = "";
+  if (VIDEO_URL.includes("youtube.com") || VIDEO_URL.includes("youtu.be")) {
+    const embedURL = VIDEO_URL.replace("watch?v=", "embed/");
+    videoHTML = `<iframe width="100%" height="315" src="${embedURL}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  } else {
+    videoHTML = `<video width="100%" controls autoplay><source src="${VIDEO_URL}" type="video/mp4">Your browser does not support the video tag.</video>`;
+  }
+  document.getElementById("videoContainer").innerHTML = videoHTML;
+}
+
+function launchConfetti() {
+  const colors = ["#ff4d6d","#ff9a9e","#fad0c4","#fbc2eb","#a18cd1"];
+  for (let i = 0; i < 150; i++) {
+    const conf = document.createElement("div");
+    conf.className = "confetti";
+    conf.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+    conf.style.left = Math.random() * 100 + "vw";
+    conf.style.animationDuration = (2 + Math.random() * 3) + "s";
+    conf.style.animationDelay = (Math.random() * 2) + "s";
+    document.body.appendChild(conf);
+    setTimeout(() => conf.remove(), 5000);
+  }
+}
+</script>
+
+</body>
+</html>
