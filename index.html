@@ -78,7 +78,7 @@ button:hover { transform: scale(1.05); }
 <div class="card" id="welcome">
   <div class="heart"></div>
   <h1>Unlock My Heart</h1>
-  <p>I made you a little adventure. Answer a few questions to reveal something special.</p>
+  <p>I made you a little adventure. Answer a few questions to see how well you know me.</p>
   <button onclick="startQuiz()">Start 💌</button>
 </div>
 
@@ -101,7 +101,8 @@ const QUESTIONS = [
   { q: "When is my birthday", a: ["21 september", "21st september"] },
   { q: "What date did we start talking", a: ["9 august", "09 august"] },
   { q: "What is the name of my smaller dog", a: ["sky"] },
-  { q: "What is the name of the car that i want and is it pretty", a: ["dodge hellcat and yes its pretty", "dodge hellcat yes its pretty"] }
+  { q: "What is the name of my dream car", a: ["dodge hellcat", "dodge hellcat"] }
+  { q: "Is my dream car pretty yes or no", a: ["yes", "yes"] }
 ];
 
 const VIDEO_URL = "https://drive.google.com/file/d/1m57l81IvZKJY7LkgTJAncUj210SZ4aOv/view?usp=sharing"; // Replace with your video link
@@ -164,4 +165,5 @@ function launchConfetti() {
 
 </body>
 </html>
+
 
