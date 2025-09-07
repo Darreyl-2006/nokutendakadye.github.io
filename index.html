@@ -105,7 +105,7 @@ const QUESTIONS = [
   { q: "Is my dream car pretty yes or no", a: ["yes", "yes"] }
 ];
 
-const VIDEO_URL = "https://vimeo.com/1116535945"; // Replace with your video link
+const VIDEO_URL = "https://player.vimeo.com/video/1116535945?"; // Replace with your video link
 let current = 0;
 
 function startQuiz() {
@@ -137,14 +137,44 @@ function checkAnswer() {
 function showFinal() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("final").classList.remove("hidden");
-  launchConfetti();
+
   let videoHTML = "";
+
+  // Check if it's a YouTube link
   if (VIDEO_URL.includes("youtube.com") || VIDEO_URL.includes("youtu.be")) {
     const embedURL = VIDEO_URL.replace("watch?v=", "embed/");
-    videoHTML = `<iframe width="100%" height="315" src="${embedURL}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-  } else {
-    videoHTML = `<iframe src="${VIDEO_URL}?autoplay=1" width="100%" height="360" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    videoHTML = `
+      <iframe width="100%" height="360"
+              src="${embedURL}?autoplay=1"
+              frameborder="0"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+              allowfullscreen>
+      </iframe>
+    `;
   }
+  // Check if it's a Vimeo link
+  else if (VIDEO_URL.includes("vimeo.com")) {
+    // IMPORTANT: VIDEO_URL should be the full player link from Vimeo's embed code
+    // Example: https://player.vimeo.com/video/1116535945?h=abc123xyz
+    videoHTML = `
+      <iframe src="${VIDEO_URL}&autoplay=1"
+              width="100%" height="360"
+              frameborder="0"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+              allowfullscreen>
+      </iframe>
+    `;
+  }
+  // Fallback for other video sources
+  else {
+    videoHTML = `
+      <video width="100%" controls autoplay>
+        <source src="${VIDEO_URL}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    `;
+  }
+
   document.getElementById("videoContainer").innerHTML = videoHTML;
 }
 
@@ -165,6 +195,7 @@ function launchConfetti() {
 
 </body>
 </html>
+
 
 
 
